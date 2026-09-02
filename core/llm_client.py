@@ -12,7 +12,8 @@ free tier's rate limits for a project like this. Groq periodically
 retires older models — if you get a "model_not_found" 404, check the
 docs link above and update the default or set GROQ_MODEL yourself.
 """
-
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import json
 import re
