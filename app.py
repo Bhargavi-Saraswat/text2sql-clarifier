@@ -43,10 +43,21 @@ with st.sidebar:
         st.session_state.schema_text = get_schema_description(DB_PATH)
         st.rerun()
 
-
+MAX_ROUNDS = 3
 def run_pipeline(nl_question: str) -> None:
     """Runs one clarify-or-generate turn and appends the outcome to the log."""
-    result = resolve(st.session_state.schema_text, nl_question, st.session_state.history)
+    force = len(st.session_state.history) >= MAX_ROUNDS
+    q = nl_question
+    if force:
+        q += "\n\nIMPORTANT: Do not ask any more questions. Use your best assumptions and list them."
+    result = resolve(st.session_state.schema_text, q, st.session_state.history)
+
+    if result.action == "clarify" and force:
+        st.session_state.log.append({"kind": "error", "message": "Couldn't resolve the question after 3 clarifications. Please rephrase."})
+        st.session_state.pending_question = None
+        st.session_state.history = []
+        st.session_state.clarifier_prompt = None
+        return
 
     if result.action == "clarify":
         st.session_state.pending_question = nl_question

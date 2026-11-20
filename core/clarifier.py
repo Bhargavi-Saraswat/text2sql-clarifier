@@ -54,6 +54,7 @@ Rules:
 - SQL must be valid SQLite syntax.
 - When you do generate SQL, note any minor default assumptions you made (e.g. "assumed 'top' means by total revenue") in "assumptions" so the user can see them.
 - Respond with ONLY the JSON object. No prose, no markdown fences.
+- The database has no concept of a logged-in user. If the question says "my" or "me", do not ask who the user is; assume they mean all customers and list that in "assumptions".
 """
 
 

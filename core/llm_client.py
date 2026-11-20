@@ -31,7 +31,7 @@ def get_client() -> Groq:
     return _client
 
 
-def call_json(system_prompt: str, user_prompt: str, max_tokens: int = 1024) -> dict:
+def call_json(system_prompt: str, user_prompt: str, max_tokens: int = 4096) -> dict:
     """
     Calls the model and parses a JSON object out of the response.
     Strips markdown code fences if the model wraps its JSON in them.
@@ -40,6 +40,8 @@ def call_json(system_prompt: str, user_prompt: str, max_tokens: int = 1024) -> d
     resp = client.chat.completions.create(
         model=MODEL,
         max_tokens=max_tokens,
+        temperature=0,
+        reasoning_effort="low",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
